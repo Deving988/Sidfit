@@ -1,0 +1,50 @@
+<div class="tracking-timeline-container">
+    <h2>Track Your SIDFIT Order</h2>
+    <p>Reference Token ID: <span id="lblTrackingOrderId"></span></p>
+    
+    <div class="progress-track-visual">
+        <div class="step-node" id="step_Placed">Placed</div>
+        <div class="step-node" id="step_Confirmed">Confirmed</div>
+        <div class="step-node" id="step_Packed">Packed</div>
+        <div class="step-node" id="step_Shipped">Shipped</div>
+        <div class="step-node" id="step_Delivered">Delivered</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+        if(!orderId) return;
+
+        document.getElementById("lblTrackingOrderId").innerText = orderId;
+
+        // Open live Firestore socket tunnel connection loop
+        db.collection("orders").doc(orderId).onSnapshot(docSnapshot => {
+            if(!docSnapshot.exists) return;
+            const statusValue = docSnapshot.data().orderStatus;
+            renderVisualTimelinePipeline(statusValue);
+        });
+    });
+
+    function renderVisualTimelinePipeline(currentStatus) {
+        const sequentialStates = ["Placed", "Confirmed", "Packed", "Shipped", "Delivered"];
+        let phaseReached = true;
+        
+        sequentialStates.forEach(state => {
+            const domTarget = document.getElementById(`step_${state}`);
+            if(!domTarget) return;
+
+            if(phaseReached) {
+                domTarget.classList.add("completed-active-state");
+            } else {
+                domTarget.classList.remove("completed-active-state");
+            }
+            
+            // Mark end point limit reached 
+            if(state === currentStatus) {
+                phaseReached = false; // Turn off remaining active nodes downstream
+            }
+        });
+    }
+</script>
