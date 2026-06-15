@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspect Collection | SIDFIT</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <header class="main-header" id="globalHeader"></header>
+
+    <main class="product-detail-viewport" style="margin-top: 120px;">
+        <div class="detail-container">
+            <!-- Left Side: Editorial Image Suite -->
+            <div class="product-gallery-panel">
+                <div class="main-hero-display">
+                    <img id="primaryDetailImg" src="" alt="SIDFIT Focus Piece">
+                </div>
+                <div class="thumbnail-strip-row" id="thumbStripContainer">
+                    <!-- Child gallery assets inject here -->
+                </div>
+            </div>
+
+            <!-- Right Side: Spec & Transaction Form -->
+            <div class="product-spec-panel">
+                <p class="brand-subheading">SIDFIT ESSENTIALS</p>
+                <h1 id="detailProductTitle" class="detail-main-title">—</h1>
+                <p id="detailProductPrice" class="detail-main-price">₹0.00</p>
+                <p id="detailProductTagline" class="detail-tagline"></p>
+
+                <!-- Dynamic Functional Size Selector Layout -->
+                <div class="spec-selectors-wrapper">
+                    <div class="selector-header-row">
+                        <span>Select Silhouette Size</span>
+                        <a href="#sizeGuideModal" class="text-link-muted">Size Blueprint Guide</a>
+                    </div>
+                    <div class="interactive-size-row" id="detailSizeSelectors">
+                        <!-- Dynamic sizing nodes render here -->
+                    </div>
+                </div>
+
+                <!-- Action Triggers -->
+                <button id="btnAddToBag" class="btn btn-primary btn-full premium-hover-effect" onclick="triggerBagIngest()">
+                    Add To Wardrobe Bag
+                </button>
+
+                <!-- Luxury Accordion Menus -->
+                <div class="editorial-accordion-stack">
+                    <details open>
+                        <summary>Garment DNA & Description</summary>
+                        <p id="detailProductDescription" class="accordion-content-text">—</p>
+                    </details>
+                    <details>
+                        <summary>Shipping & Sustainable Logistics</summary>
+                        <p class="accordion-content-text">Complimentary premium secure express courier packaging across India. Dispatched within 24–48 hours in biodegradable premium linen storage dust bags.</p>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script>
+        // Inline controller to catch specific product SKU URL query parameter routing definitions
+        let targetedActiveProductId = "";
+        let selectedSizeTarget = "";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const pathArgs = new URLSearchParams(window.location.search);
+            targetedActiveProductId = pathArgs.get("id");
+            if(targetedActiveProductId) {
+                executeItemDataPipeline(targetedActiveProductId);
+            }
+        });
+
+        function executeItemDataPipeline(id) {
+            db.collection("products").doc(id).get().then(snapshot => {
+                if(!snapshot.exists) {
+                    window.location.href = "shop.html";
+                    return;
+                }
+                const record = snapshot.data();
+                
+                document.getElementById("detailProductTitle").innerText = record.title;
+                document.getElementById("detailProductPrice").innerText = "₹" + record.price.toLocaleString('en-IN');
+                document.getElementById("detailProductTagline").innerText = record.tagline || "";
+                document.getElementById("detailProductDescription").innerText = record.description;
+                
+                const mainImg = document.getElementById("primaryDetailImg");
+                mainImg.src = record.images[0];
+
+                // Build out thumbnail system
+                const thumbBox = document.getElementById("thumbStripContainer");
+                thumbBox.innerHTML = "";
+                record.images.forEach(imgUrl => {
+                    const thumb = document.createElement("img");
+                    thumb.src = imgUrl;
+                    thumb.className = "gallery-strip-thumb";
+                    thumb.onclick = () => mainImg.src = imgUrl;
+                    thumbBox.appendChild(thumb);
+                });
+
+                // Generate active sizes array interface nodes
+                const sizeBox = document.getElementById("detailSizeSelectors");
+                sizeBox.innerHTML = "";
+                record.sizes.forEach(size => {
+                    const node = document.createElement("button");
+                    node.className = "size-spec-node";
+                    node.innerText = size;
+                    
+                    // Out of stock validation pattern check
+                    if(record.inventory && record.inventory[size] === 0) {
+                        node.classList.add("disabled-depleted");
+                        node.disabled = true;
+                    } else {
+                        node.onclick = () => {
+                            document.querySelectorAll(".size-spec-node").forEach(b => b.classList.remove("selected-active"));
+                            node.classList.add("selected-active");
+                            selectedSizeTarget = size;
+                        };
+                    }
+                    sizeBox.appendChild(node);
+                });
+            });
+        }
+
+        function triggerBagIngest() {
+            if(!selectedSizeTarget) {
+                alert("Please select a specific size blueprint before checking out.");
+                return;
+            }
+            directAddToCart(targetedActiveProductId, selectedSizeTarget);
+            
+            // Visual feedback transition indicator on premium action bar
+            const orderBtn = document.getElementById("btnAddToBag");
+            orderBtn.innerText = "Item Transferred Successfully";
+            setTimeout(() => { orderBtn.innerText = "Add To Wardrobe Bag"; }, 2500);
+        }
+    </script>
+</body>
+</html>
