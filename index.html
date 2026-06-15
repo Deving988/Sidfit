@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIDFIT | Luxury Essential Fashion</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="nav-container">
+            <button class="mobile-menu-toggle" aria-label="Toggle Menu"><span></span></button>
+            
+            <a href="index.html" class="brand-logo">SIDFIT</a>
+            
+            <nav class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="shop.html?cat=new">New In</a>
+                <a href="shop.html?cat=collections">Collections</a>
+            </nav>
+            
+            <div class="nav-actions">
+                <a href="#" id="searchTrigger" class="nav-icon"><span class="icon-search"></span></a>
+                <a href="account.html" class="nav-icon"><span class="icon-user"></span></a>
+                <a href="#" id="wishlistTrigger" class="nav-icon"><span class="icon-heart"></span><span class="badge" id="wishlistCount">0</span></a>
+                <a href="#" id="cartTrigger" class="nav-icon"><span class="icon-bag"></span><span class="badge" id="cartCount">0</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-viewport">
+            <div class="hero-bg-wrapper">
+                <div class="hero-overlay"></div>
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1200" alt="SIDFIT Editorial" class="hero-img" id="heroBanner">
+            </div>
+            <div class="hero-content">
+                <p class="hero-subtitle fade-in">THE ESCAPADE COLLECTION</p>
+                <h1 class="hero-title fade-in">Minimal Form.<br>Maximum Impact.</h1>
+                <a href="shop.html" class="btn btn-primary premium-hover-effect">Shop Collection</a>
+            </div>
+        </section>
+
+        <section class="section-container">
+            <div class="section-header">
+                <h2 class="section-heading">Curated Collections</h2>
+            </div>
+            <div class="collections-grid">
+                </div>
+        </section>
+
+        <section class="section-container">
+            <div class="section-header">
+                <h2 class="section-heading">New Arrivals</h2>
+                <a href="shop.html" class="text-link">View All</a>
+            </div>
+            <div class="products-grid" id="featuredProductsContainer">
+                </div>
+        </section>
+    </main>
+
+    <div class="side-drawer" id="cartDrawer">
+        <div class="drawer-overlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h3>Shopping Bag (<span id="cartDrawerCount">0</span>)</h3>
+                <button class="close-drawer">&times;</button>
+            </div>
+            <div class="drawer-body" id="cartDrawerItems">
+                </div>
+            <div class="drawer-footer">
+                <div class="summary-line">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">₹0.00</span>
+                </div>
+                <a href="checkout.html" class="btn btn-full btn-dark">Proceed To Checkout</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="js/app.js" defer></script>
+</body>
+</html>
