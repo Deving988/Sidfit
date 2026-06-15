@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SIDFIT System Control | Admin Terminal</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body class="admin-body">
+
+    <div id="adminAuthGate" class="auth-gate-modal">
+        <div class="gate-box">
+            <h2>SIDFIT Administrative Sign-In</h2>
+            <input type="email" id="adminEmail" placeholder="Internal Email ID">
+            <input type="password" id="adminPassword" placeholder="Security Token Passkey">
+            <button onclick="executeAdminAuth()" class="btn btn-primary">Authorize Key</button>
+        </div>
+    </div>
+
+    <div id="adminMainDashboard" class="admin-layout hidden">
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">SIDFIT CTRL</div>
+            <nav class="sidebar-nav">
+                <a href="#analytics" class="active">Performance Matrix</a>
+                <a href="#inventory" onclick="switchAdminTab('inventory')">Catalog Manager</a>
+                <a href="#orders" onclick="switchAdminTab('orders')">Fulfillment Desk</a>
+            </nav>
+        </aside>
+
+        <main class="admin-content-pane">
+            <header class="pane-header">
+                <h2>Operational Control Overview</h2>
+                <button onclick="firebase.auth().signOut()" class="text-link">Terminal Secure Exit</button>
+            </header>
+
+            <section id="analyticsSection" class="matrix-grid">
+                <div class="metric-card">
+                    <h3>Gross Revenue (MTD)</h3>
+                    <p id="metricGross">₹0.00</p>
+                </div>
+                <div class="metric-card">
+                    <h3>Active Active Orders</h3>
+                    <p id="metricOrders">0</p>
+                </div>
+            </section>
+
+            <section id="inventorySection" class="admin-section-block">
+                <h3>Inject New Design SKU</h3>
+                <form id="productCreationForm" onsubmit="createNewProductSKU(event)">
+                    <input type="text" id="skuTitle" placeholder="Product Title Name" required>
+                    <input type="number" id="skuPrice" placeholder="MSRP Base Price (INR)" required>
+                    <input type="text" id="skuImages" placeholder="Image CDN/Storage URL (Comma delimited links)" required>
+                    <input type="text" id="skuCategory" placeholder="Target Line/Category" required>
+                    <div class="checkbox-row">
+                        <label><input type="checkbox" id="skuFeatured"> Promote to Front Page Hero Feed</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Commit Matrix Object to Cloud</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/admin.js" defer></script>
+</body>
+</html>
