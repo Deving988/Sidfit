@@ -1,0 +1,212 @@
+/* --- Luxury Design System Tokens --- */
+:root {
+    --bg-primary: #ffffff;
+    --text-primary: #111111;
+    --text-muted: #767676;
+    --accent-color: #000000;
+    --border-color: #e5e5e5;
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 32px;
+    --spacing-lg: 64px;
+    --font-serif: 'Cormorant Garamond', serif;
+    --font-sans: 'Inter', sans-serif;
+    --transition-smooth: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* --- Navigation --- */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    transition: transform 0.4s var(--transition-smooth);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px var(--spacing-md);
+}
+
+.brand-logo {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: 4px;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-right: var(--spacing-md);
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--text-primary);
+    transition: width 0.3s var(--transition-smooth);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* --- Hero Layout --- */
+.hero-viewport {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-left: 10%;
+    overflow: hidden;
+}
+
+.hero-bg-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.05);
+    animation: panZoom 10s infinite alternate var(--transition-smooth);
+}
+
+.hero-content {
+    max-width: 600px;
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: var(--spacing-md);
+}
+
+/* --- Premium Product Cards --- */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+}
+
+.product-card {
+    position: relative;
+    background: #fff;
+    transition: transform 0.4s var(--transition-smooth);
+}
+
+.product-image-frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background-color: #f9f9f9;
+}
+
+.product-image-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--transition-smooth);
+}
+
+.product-card:hover .product-image-frame img {
+    transform: scale(1.05);
+}
+
+.product-meta {
+    padding: var(--spacing-sm) 0;
+}
+
+.product-title {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.product-price {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 16px 36px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border: 1px solid var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s var(--transition-smooth);
+}
+
+.btn-primary {
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: var(--text-primary);
+}
+
+/* --- Mobile Breakpoints --- */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none; /* Add active state overrides for dynamic mobile slide menu */
+    }
+    .hero-viewport {
+        padding-left: var(--spacing-sm);
+    }
+}
+
+@keyframes panZoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.06); }
+}
